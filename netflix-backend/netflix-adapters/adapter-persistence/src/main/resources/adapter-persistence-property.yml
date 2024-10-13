@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    hikari:
+      jdbc-url: jdbc:mysql://localhost:3306/netflix
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: myuser
+      password: mypassword
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: validate
+      # ddl-auto: update
+    generate-ddl: false
+    # generate-ddl: true
+    open-in-view: false
+    show-sql: true
+#  flyway:
+#    locations: classpath:flyway
+#    baseline-on-migrate: true
+#    baseline-version: 1
+#    enabled: true
