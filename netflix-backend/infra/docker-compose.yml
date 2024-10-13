@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0.35
+    container_name: netflix-mysql
+    restart: always
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+      TZ: Asia/Seoul
+    volumes:
+      - ./db/mysql/data:/var/lib/mysql
+      - ./db/mysql/init:/docker-entrypoint-initdb.d
+
+  redis:
+    container_name: netflix-redis
+    hostname: redis
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    command: redis-server
+    restart: always
