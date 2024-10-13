@@ -1,5 +1,6 @@
-package com.jinyeong.netflix.sample;
+package com.jinyeong.netflix.controller.sample;
 
+import com.jinyeong.netflix.sample.SearchSampleUseCase;
 import com.jinyeong.netflix.sample.response.SampleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
