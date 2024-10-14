@@ -25,7 +25,7 @@ public class UserController {
         UserRegistrationResponse userRegistrationResponse = registerUserUseCase.register(
                 UserRegistrationCommand.builder()
                         .email(userRegistrationRequest.getEmail())
-                        .encryptedPassword(passwordEncoder.encode(userRegistrationRequest.getPassword()))
+                        .encryptedPassword(userRegistrationRequest.getPassword())
                         .phone(userRegistrationRequest.getPhone())
                         .username(userRegistrationRequest.getUsername())
                         .build()

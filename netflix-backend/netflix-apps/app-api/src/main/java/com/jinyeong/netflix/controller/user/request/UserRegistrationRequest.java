@@ -1,12 +1,14 @@
 package com.jinyeong.netflix.controller.user.request;
 
+import com.jinyeong.netflix.annotation.PasswordEncryption;
 import lombok.Getter;
 
 @Getter
 public class UserRegistrationRequest {
     private final String username;
 
-    private final String password;
+    @PasswordEncryption
+    private String password;
 
     private final String email;
 
