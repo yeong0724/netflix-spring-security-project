@@ -3,6 +3,7 @@ package com.jinyeong.netflix.security;
 import com.jinyeong.netflix.user.FetchUserUseCase;
 import com.jinyeong.netflix.user.command.UserResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,14 +22,16 @@ public class NetflixUserDetailsService implements UserDetailsService {
      */
     @Override
     public NetflixAuthUser loadUserByUsername(String email) throws UsernameNotFoundException {
+        // TODO: 회원이 존재하지 않을 경우에 대한 예외처리 작업 필요
         UserResponse userResponse = fetchUserUseCase.findUserByEmail(email);
+
         return new NetflixAuthUser(
                 userResponse.getUserId(),
                 userResponse.getUserName(),
                 userResponse.getPassword(),
                 userResponse.getEmail(),
                 userResponse.getPhone(),
-                List.of(new SimpleGrantedAuthority(userResponse.getRole()))
+                List.of(new SimpleGrantedAuthority(StringUtils.isBlank(userResponse.getRole()) ? "-" : userResponse.getRole()))
         );
     }
 }

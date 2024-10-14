@@ -1,6 +1,6 @@
 package com.jinyeong.netflix.controller.movie;
 
-import com.jinyeong.netflix.controller.NetplixApiResponse;
+import com.jinyeong.netflix.controller.NetflixApiResponse;
 import com.jinyeong.netflix.movie.FetchMovieUseCase;
 import com.jinyeong.netflix.movie.response.PageableMoviesResponse;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +18,9 @@ public class MovieController {
     }
 
     @GetMapping("/movie/client/{page}")
-    public NetplixApiResponse<PageableMoviesResponse> fetchMoviePageable(@PathVariable int page) {
+    public NetflixApiResponse<PageableMoviesResponse> fetchMoviePageable(@PathVariable int page) {
         PageableMoviesResponse pageableMoviesResponse = fetchMovieUseCase.fetchFromClient(page);
 
-        return NetplixApiResponse.ok(pageableMoviesResponse);
+        return NetflixApiResponse.ok(pageableMoviesResponse);
     }
 }
