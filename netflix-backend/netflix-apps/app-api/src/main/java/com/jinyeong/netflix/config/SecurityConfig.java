@@ -33,8 +33,8 @@ public class SecurityConfig {
                 .userDetailsService(netflixUserDetailsService)
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/", "/register", "/api/v1/user/**", "/api/v1/auth/**").permitAll()
-                        .anyRequest().authenticated());
-                // .oauth2Login(oauth2 -> oauth2.failureUrl("/login?error=true"));
+                        .anyRequest().authenticated())
+                .oauth2Login(oauth2 -> oauth2.failureUrl("/login?error=true"));
 
         return httpSecurity.build();
     }

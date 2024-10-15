@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
@@ -58,5 +60,11 @@ public class UserController {
         NetflixAuthUser netflixAuthUser = (NetflixAuthUser) authentication.getPrincipal();
 
         return NetflixApiResponse.ok("access-token");
+    }
+
+    @PostMapping("/user/callback")
+    public NetflixApiResponse<String> kakaoLoginCallback(@RequestBody Map<String, String> request) {
+        String code = request.get("code");
+        return NetflixApiResponse.ok(code);
     }
 }
