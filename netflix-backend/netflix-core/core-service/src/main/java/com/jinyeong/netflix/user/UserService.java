@@ -13,8 +13,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService implements FetchUserUseCase, RegisterUserUseCase {
     private final FetchUserPort fetchUserPort;
-
     private final InsertUserPort insertUserPort;
+    private final KakaoUserPort kakaoUserPort;
 
     @Override
     public UserResponse findUserByEmail(String email) {
@@ -31,7 +31,7 @@ public class UserService implements FetchUserUseCase, RegisterUserUseCase {
                 .password(userPortResponse.getPassword())
                 .phone(userPortResponse.getPhone())
                 .role(userPortResponse.getRole())
-                .userName(userPortResponse.getUserName())
+                .username(userPortResponse.getUsername())
                 .build();
     }
 
@@ -57,9 +57,43 @@ public class UserService implements FetchUserUseCase, RegisterUserUseCase {
         );
 
         return new UserRegistrationResponse(
-                userPortResponse.getUserName(),
+                userPortResponse.getUsername(),
                 userPortResponse.getEmail(),
                 userPortResponse.getPhone()
         );
+    }
+
+    @Override
+    public UserRegistrationResponse registerSocialUser(String username, String provider, String providerId) {
+        Optional<UserPortResponse> userByProviderId = fetchUserPort.findByProviderId(providerId);
+        if (userByProviderId.isPresent()) {
+            return null;
+        }
+
+        UserPortResponse socialUser = insertUserPort.createSocialUser(username, provider, providerId);
+        return new UserRegistrationResponse(socialUser.getUsername(), null, null);
+    }
+
+    @Override
+    public UserResponse findByProviderId(String providerId) {
+
+        return fetchUserPort.findByProviderId(providerId)
+                .map(userByProviderId -> UserResponse.builder()
+                        .providerId(userByProviderId.getProviderId())
+                        .provider(userByProviderId.getProvider())
+                        .username(userByProviderId.getUsername())
+                        .build())
+                .orElse(null);
+    }
+
+    @Override
+    public UserResponse findKakaoUser(String accessToken) {
+        UserPortResponse userPortResponse = kakaoUserPort.findUserFromKakao(accessToken);
+
+        return UserResponse.builder()
+                .username(userPortResponse.getUsername())
+                .provider(userPortResponse.getProvider())
+                .providerId(userPortResponse.getProviderId())
+                .build();
     }
 }

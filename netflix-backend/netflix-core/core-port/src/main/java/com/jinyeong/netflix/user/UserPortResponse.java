@@ -8,7 +8,7 @@ import lombok.Getter;
 public class UserPortResponse {
     private String userId;
 
-    private String userName;
+    private String username;
 
     private String password;
 

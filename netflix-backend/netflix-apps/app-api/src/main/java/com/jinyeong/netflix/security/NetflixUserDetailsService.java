@@ -27,7 +27,7 @@ public class NetflixUserDetailsService implements UserDetailsService {
 
         return new NetflixAuthUser(
                 userResponse.getUserId(),
-                userResponse.getUserName(),
+                userResponse.getUsername(),
                 userResponse.getPassword(),
                 userResponse.getEmail(),
                 userResponse.getPhone(),

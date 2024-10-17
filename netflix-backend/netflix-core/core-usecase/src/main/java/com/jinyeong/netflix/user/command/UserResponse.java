@@ -8,7 +8,7 @@ import lombok.Getter;
 public class UserResponse {
     private final String userId;
 
-    private final String userName;
+    private final String username;
 
     private final String password;
 
@@ -22,9 +22,9 @@ public class UserResponse {
 
     private final String role;
 
-    public UserResponse(String userId, String userName, String password, String email, String phone, String provider, String providerId, String role) {
+    public UserResponse(String userId, String username, String password, String email, String phone, String provider, String providerId, String role) {
         this.userId = userId;
-        this.userName = userName;
+        this.username = username;
         this.password = password;
         this.email = email;
         this.phone = phone;

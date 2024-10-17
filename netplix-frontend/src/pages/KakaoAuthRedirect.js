@@ -14,8 +14,8 @@ function KakaoAuthRedirect() {
       axios
         .post("http://localhost:8080/api/v1/user/callback", { code })
         .then((response) => {
-          console.log("response : ", response);
-          const token = response.data.data.accessToken; // 백엔드에서 받은 JWT 토큰
+          const token = response.data.data; // 백엔드에서 받은 JWT 토큰
+          console.log("accessToken : ", token);
           localStorage.setItem("token", token); // 토큰을 localStorage에 저장
           navigate("/dashboard"); // 로그인 후 대시보드로 리디렉션
         })

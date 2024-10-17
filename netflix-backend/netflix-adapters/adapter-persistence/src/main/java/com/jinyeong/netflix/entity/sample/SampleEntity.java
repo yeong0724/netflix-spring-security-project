@@ -1,4 +1,4 @@
-package com.jinyeong.netflix.entity;
+package com.jinyeong.netflix.entity.sample;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

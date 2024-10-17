@@ -1,6 +1,6 @@
-package com.jinyeong.netflix.repository;
+package com.jinyeong.netflix.repository.sample;
 
-import com.jinyeong.netflix.entity.SampleEntity;
+import com.jinyeong.netflix.entity.sample.SampleEntity;
 
 import java.util.List;
 

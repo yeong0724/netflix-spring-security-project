@@ -4,13 +4,18 @@ import com.jinyeong.netflix.controller.NetflixApiResponse;
 import com.jinyeong.netflix.controller.user.request.UserLoginRequest;
 import com.jinyeong.netflix.controller.user.request.UserRegistrationRequest;
 import com.jinyeong.netflix.security.NetflixAuthUser;
+import com.jinyeong.netflix.token.FetchTokenUseCase;
+import com.jinyeong.netflix.token.UpdateTokenUseCase;
+import com.jinyeong.netflix.user.FetchUserUseCase;
 import com.jinyeong.netflix.user.RegisterUserUseCase;
 import com.jinyeong.netflix.user.command.UserRegistrationCommand;
+import com.jinyeong.netflix.user.command.UserResponse;
 import com.jinyeong.netflix.user.response.UserRegistrationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +29,9 @@ import java.util.Map;
 public class UserController {
     private final RegisterUserUseCase registerUserUseCase;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final FetchTokenUseCase fetchTokenUseCase;
+    private final FetchUserUseCase fetchUserUseCase;
+    private final UpdateTokenUseCase updateTokenUseCase;
 
     @PostMapping("/user/register")
     public NetflixApiResponse<UserRegistrationResponse> userRegister(@RequestBody UserRegistrationRequest userRegistrationRequest) {
@@ -64,7 +72,28 @@ public class UserController {
 
     @PostMapping("/user/callback")
     public NetflixApiResponse<String> kakaoLoginCallback(@RequestBody Map<String, String> request) {
+        // 1. Kakao Social Login을 성공해 Authorization Server로 부터 Code를 전달 받는다.
         String code = request.get("code");
-        return NetflixApiResponse.ok(code);
+
+        // 2. 전달 받은 코드를 다시 Kakao Authorization Server로 전송해 AccessToken을 발급 받는다.
+        String AccessTokenFromKakao = fetchTokenUseCase.getTokenFromKakao(code);
+
+        // 3. 발급 받은 AccessToken을 Resource Server로 보내 사용자 정보를 전달 받는다.
+        UserResponse kakaoUserInfo = fetchUserUseCase.findKakaoUser(AccessTokenFromKakao);
+
+        // 4. 기존에 Kakao Login을 한적이 있는 사용자 인지 확인하고 최초이면 social_users 테이블에 등록(회원가입)
+        UserResponse userByProviderId = fetchUserUseCase.findByProviderId(kakaoUserInfo.getProviderId());
+        if (ObjectUtils.isEmpty(userByProviderId)) {
+            registerUserUseCase.registerSocialUser(
+                    kakaoUserInfo.getUsername(),
+                    kakaoUserInfo.getProvider(),
+                    kakaoUserInfo.getProviderId()
+            );
+        }
+
+        // 5. 최종적으로 로그인(회원가입) 로직을 수행하고 나면 Front단으로 Access_Token을 반환
+        String accessToken = updateTokenUseCase.updateInsertToken(kakaoUserInfo.getProviderId());
+
+        return NetflixApiResponse.ok(accessToken);
     }
 }

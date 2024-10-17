@@ -1,5 +1,6 @@
 package com.jinyeong.netflix.repository.user;
 
+import com.jinyeong.netflix.entity.user.SocialUserEntity;
 import com.jinyeong.netflix.entity.user.UserEntity;
 import com.jinyeong.netflix.user.CreateUser;
 import com.jinyeong.netflix.user.FetchUserPort;
@@ -15,6 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserRepository implements FetchUserPort, InsertUserPort {
     private final UserJpaRepository userJpaRepository;
+    private final SocialUserJpaRepository socialUserJpaRepository;
 
     @Override
     public Optional<UserPortResponse> findByEmail(String email) {
@@ -22,9 +24,26 @@ public class UserRepository implements FetchUserPort, InsertUserPort {
         return userByEmail.map(userEntity -> UserPortResponse.builder()
                 .userId(userEntity.getUserId())
                 .password(userEntity.getPassword())
-                .userName(userEntity.getUsername())
+                .username(userEntity.getUsername())
                 .email(userEntity.getEmail())
                 .phone(userEntity.getPhone())
+                .build());
+    }
+
+    @Override
+    @Transactional
+    public Optional<UserPortResponse> findByProviderId(String providerId) {
+        Optional<SocialUserEntity> userByProviderId = socialUserJpaRepository.findByProviderId(providerId);
+
+        if (userByProviderId.isEmpty()) {
+            return Optional.empty();
+        }
+
+        SocialUserEntity socialUserEntity = userByProviderId.get();
+        return Optional.of(UserPortResponse.builder()
+                .username(socialUserEntity.getUsername())
+                .provider(socialUserEntity.getProvider())
+                .providerId(socialUserEntity.getProviderId())
                 .build());
     }
 
@@ -41,10 +60,22 @@ public class UserRepository implements FetchUserPort, InsertUserPort {
         UserEntity savedUserEntity = userJpaRepository.save(userEntity);
         return UserPortResponse.builder()
                 .userId(savedUserEntity.getUserId())
-                .userName(savedUserEntity.getUsername())
+                .username(savedUserEntity.getUsername())
                 .password(savedUserEntity.getPassword())
                 .email(savedUserEntity.getEmail())
                 .phone(savedUserEntity.getPhone())
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public UserPortResponse createSocialUser(String username, String provider, String providerId) {
+        SocialUserEntity socialUserEntity = new SocialUserEntity(username, provider, providerId);
+        socialUserJpaRepository.save(socialUserEntity);
+        return UserPortResponse.builder()
+                .username(socialUserEntity.getUsername())
+                .provider(socialUserEntity.getProvider())
+                .providerId(socialUserEntity.getProviderId())
                 .build();
     }
 }

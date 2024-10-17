@@ -9,4 +9,9 @@ dependencies {
 
     implementation("org.springframework.data:spring-data-commons")
     implementation("org.springframework:spring-context")
+
+    // jwt 관련 의존성
+    implementation("io.jsonwebtoken:jjwt-api")
+    implementation("io.jsonwebtoken:jjwt-impl")
+    implementation("io.jsonwebtoken:jjwt-jackson")
 }

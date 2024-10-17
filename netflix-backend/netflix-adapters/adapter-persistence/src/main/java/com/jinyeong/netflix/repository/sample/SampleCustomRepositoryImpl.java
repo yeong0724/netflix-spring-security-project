@@ -1,7 +1,7 @@
-package com.jinyeong.netflix.repository;
+package com.jinyeong.netflix.repository.sample;
 
-import com.jinyeong.netflix.entity.QSampleEntity;
-import com.jinyeong.netflix.entity.SampleEntity;
+import com.jinyeong.netflix.entity.sample.QSampleEntity;
+import com.jinyeong.netflix.entity.sample.SampleEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
