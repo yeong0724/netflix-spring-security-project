@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "../Login.css"; //
+import kakaoLoginImage from "../assets/images/kakao_login_large_narrow.png";
 
 function Login({ setIsLoggedIn }) {
   const [username, setUsername] = useState("kid4211@yahoo.co.kr");
@@ -47,14 +49,11 @@ function Login({ setIsLoggedIn }) {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100">
-      <div
-        className="card shadow-sm p-4"
-        style={{ width: "100%", maxWidth: "400px" }}
-      >
-        <h3 className="text-center mb-4">로그인</h3>
+    <div className="login-container">
+      <div className="login-card">
+        <h3 className="login-title">로그인</h3>
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
+          <div className="form-group">
             <label htmlFor="username" className="form-label">
               Username
             </label>
@@ -66,7 +65,7 @@ function Login({ setIsLoggedIn }) {
               onChange={(e) => setUsername(e.target.value)}
             />
           </div>
-          <div className="mb-3">
+          <div className="form-group">
             <label htmlFor="password" className="form-label">
               Password
             </label>
@@ -78,15 +77,16 @@ function Login({ setIsLoggedIn }) {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button type="submit" className="btn btn-primary w-100">
+          <button type="submit" className="btn login-btn">
             로그인
           </button>
         </form>
-        <button
-          onClick={handleKakaoLogin}
-          className="btn btn-warning w-100 mt-3"
-        >
-          카카오로 로그인
+        <button onClick={handleKakaoLogin} className="btn kakao-btn">
+          <img
+            src={kakaoLoginImage}
+            alt="카카오 로그인"
+            className="kakao-icon"
+          />
         </button>
       </div>
     </div>

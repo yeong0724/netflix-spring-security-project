@@ -1,0 +1,106 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.login-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #495057;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+.btn {
+  width: 100%;
+  height: 48px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  outline: none; /* 클릭 시 외곽선 제거 */
+}
+
+.login-btn {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.login-btn:hover {
+  background-color: #0056b3;
+}
+
+.login-btn:active {
+  transform: translateY(1px); /* 클릭 시 약간 아래로 이동 */
+}
+
+.kakao-btn {
+  background-color: #fee500;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  user-select: none; /* 텍스트 선택 방지 */
+}
+
+.kakao-btn:hover {
+  background-color: #fee500;
+}
+
+.kakao-btn:active {
+  transform: translateY(1px); /* 클릭 시 약간 아래로 이동 */
+}
+
+.kakao-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  transition: opacity 0.3s ease;
+  pointer-events: none; /* 이미지에 대한 마우스 이벤트 무시 */
+}
+
+.kakao-btn:hover .kakao-icon {
+  opacity: 0.6;
+}
+
+/* 버튼에 대한 추가적인 리셋 */
+.btn::-moz-focus-inner {
+  border: 0;
+}
