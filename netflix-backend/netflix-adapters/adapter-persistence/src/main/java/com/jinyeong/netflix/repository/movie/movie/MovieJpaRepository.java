@@ -1,4 +1,4 @@
-package com.jinyeong.netflix.repository.movie;
+package com.jinyeong.netflix.repository.movie.movie;
 
 import com.jinyeong.netflix.entity.movie.MovieEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
