@@ -2,12 +2,15 @@ package com.jinyeong.netflix.movie;
 
 import com.jinyeong.netflix.movie.response.MovieResponse;
 import com.jinyeong.netflix.movie.response.PageableMoviesResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class MovieService implements FetchMovieUseCase {
+@Slf4j
+public class MovieService implements FetchMovieUseCase, InsertMovieUseCase {
     private final TmdbMoviePort tmdbMoviePort;
 
     public MovieService(TmdbMoviePort tmdbMoviePort) {
@@ -29,5 +32,10 @@ public class MovieService implements FetchMovieUseCase {
                 tmdbPageableMovies.getPage(),
                 tmdbPageableMovies.isHasNext()
         );
+    }
+
+    @Override
+    public void insert(List<MovieResponse> movies) {
+        log.info("Movie Size : {} -> {}", movies.size(), movies.get(0).getMovieName());
     }
 }

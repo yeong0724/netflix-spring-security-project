@@ -1,0 +1,59 @@
+server:
+  port: 8081
+
+spring:
+  batch:
+    job:
+      name: ${job.name:NONE}
+  datasource:
+    hikari:
+      jdbc-url: jdbc:mysql://localhost:3306/netflix
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: myuser
+      password: mypassword
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: validate
+      # ddl-auto: update
+    generate-ddl: false
+    # generate-ddl: true
+    open-in-view: false
+    database: mysql
+    show-sql: true
+  config:
+    import:
+      - 'classpath:adapter-http-property.yml'
+      - 'classpath:adapter-persistence-property.yml'
+      - 'classpath:adapter-redis-property.yml'
+  profiles:
+    active: local
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: 5d2d2c019e26a0aa2bec0d372d25a460
+            client-secret: u7rooE7phRvsCwGICLGSFMDZbOSBYpjb
+            client-name: Kakao
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://localhost:3000/login/oauth2/code/kakao"
+            scope: profile_nickname, profile_image, account_email, name, gender, birthday, birthyear, phone_number
+            client-authentication-method: client_secret_post
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+      kakao:
+        token-url: "https://kauth.kakao.com/oauth/token"
+        userinfo-api-url: "https://kapi.kakao.com/v2/user/me"
+jwt:
+  # openssl rand -hex 32
+  secret: 1e9a9babf47c082fd065b03a9b916d476f8f901c7f7131201fb165100dc15135
+  expire:
+    access-token: 1
+    refresh-token: 24
