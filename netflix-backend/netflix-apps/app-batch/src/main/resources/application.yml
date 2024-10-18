@@ -55,5 +55,5 @@ jwt:
   # openssl rand -hex 32
   secret: 1e9a9babf47c082fd065b03a9b916d476f8f901c7f7131201fb165100dc15135
   expire:
-    access-token: 1
-    refresh-token: 24
+    access-token: 15
+    refresh-token: 60

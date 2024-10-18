@@ -39,8 +39,8 @@ public class TokenService implements FetchTokenUseCase, UpdateTokenUseCase, Crea
 
     @Override
     public TokenResponse createNewToken(String userId) {
-        String accessToken = getToken(userId, Duration.ofHours(accessTokenExpireHour));
-        String refreshToken = getToken(userId, Duration.ofHours(refreshTokenExpireHour));
+        String accessToken = getToken(userId, Duration.ofMinutes(accessTokenExpireHour));
+        String refreshToken = getToken(userId, Duration.ofMinutes(refreshTokenExpireHour));
         TokenPortResponse tokenPortResponse = insertTokenPort.create(userId, accessToken, refreshToken);
 
         return TokenResponse.builder()
@@ -86,8 +86,8 @@ public class TokenService implements FetchTokenUseCase, UpdateTokenUseCase, Crea
     @Override
     public String updateInsertToken(String providerId) {
         TokenPortResponse tokenByUserId = searchTokenPort.findByUserId(providerId);
-        String accessToken = getToken(providerId, Duration.ofHours(accessTokenExpireHour));
-        String refreshToken = getToken(providerId, Duration.ofHours(refreshTokenExpireHour));
+        String accessToken = getToken(providerId, Duration.ofMinutes(accessTokenExpireHour));
+        String refreshToken = getToken(providerId, Duration.ofMinutes(refreshTokenExpireHour));
 
         // create
         if (tokenByUserId == null) {
