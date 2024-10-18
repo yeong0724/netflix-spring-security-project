@@ -1,5 +1,6 @@
 package com.jinyeong.netflix.config;
 
+import com.jinyeong.netflix.filter.JwtAuthenticationFilter;
 import com.jinyeong.netflix.security.NetflixUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -22,6 +24,7 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final NetflixUserDetailsService netflixUserDetailsService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -34,7 +37,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/", "/register", "/api/v1/user/**", "/api/v1/auth/**").permitAll()
                         .anyRequest().authenticated())
-                .oauth2Login(oauth2 -> oauth2.failureUrl("/login?error=true"));
+                .oauth2Login(oauth2 -> oauth2.failureUrl("/login?error=true"))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

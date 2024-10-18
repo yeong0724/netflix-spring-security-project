@@ -5,7 +5,10 @@ import com.jinyeong.netflix.movie.response.PageableMoviesResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +40,23 @@ public class MovieService implements FetchMovieUseCase, InsertMovieUseCase {
     }
 
     @Override
+    public PageableMoviesResponse fetchFromDb(int page) {
+        List<NetflixMovie> moviesByPageAndSize = persistenceMoviePort.fetchByPageAndSize(page, 10);
+
+        return new PageableMoviesResponse(
+                moviesByPageAndSize.stream().map(movie -> new MovieResponse(
+                        movie.getMovieName(),
+                        movie.getIsAdult(),
+                        StringToList(movie.getGenre()),
+                        movie.getOverview(),
+                        movie.getReleasedAt()
+                )).toList(),
+                page,
+                true
+        );
+    }
+
+    @Override
     public void insert(List<MovieResponse> movies) {
         movies.forEach(movie -> {
             NetflixMovie netflixMovie = NetflixMovie.builder()
@@ -50,5 +70,11 @@ public class MovieService implements FetchMovieUseCase, InsertMovieUseCase {
             persistenceMoviePort.insert(netflixMovie);
         });
 
+    }
+
+    private static List<String> StringToList(String genre) {
+        return Optional.ofNullable(genre)
+                .map(stringGenre -> Arrays.asList(stringGenre.split(",")))
+                .orElse(Collections.emptyList());
     }
 }
