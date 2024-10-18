@@ -12,9 +12,11 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MovieService implements FetchMovieUseCase, InsertMovieUseCase {
     private final TmdbMoviePort tmdbMoviePort;
+    private final PersistenceMoviePort persistenceMoviePort;
 
-    public MovieService(TmdbMoviePort tmdbMoviePort) {
+    public MovieService(TmdbMoviePort tmdbMoviePort, PersistenceMoviePort persistenceMoviePort) {
         this.tmdbMoviePort = tmdbMoviePort;
+        this.persistenceMoviePort = persistenceMoviePort;
     }
 
     @Override
@@ -36,6 +38,17 @@ public class MovieService implements FetchMovieUseCase, InsertMovieUseCase {
 
     @Override
     public void insert(List<MovieResponse> movies) {
-        log.info("Movie Size : {} -> {}", movies.size(), movies.get(0).getMovieName());
+        movies.forEach(movie -> {
+            NetflixMovie netflixMovie = NetflixMovie.builder()
+                    .movieName(movie.getMovieName())
+                    .isAdult(movie.isAdult())
+                    .overview(movie.getOverview())
+                    .releasedAt(movie.getReleaseAt())
+                    .genre(String.join(",", movie.getGenre()))
+                    .build();
+
+            persistenceMoviePort.insert(netflixMovie);
+        });
+
     }
 }

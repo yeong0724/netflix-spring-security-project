@@ -41,6 +41,7 @@ public class MigrateMoviesFromTmdbBatch {
     @Bean(name = "MigrateMoviesFromTmdbBatchTaskletStep")
     public Step step(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
         return new StepBuilder("MigrateMoviesFromTmdbBatchTaskletStep", jobRepository)
+                // 10개의 데이터를 하나의 청크로 잡아서 search & insert 처리 (즉, 10개 단위로 하나의 트랜잭션 처리)
                 .chunk(10, platformTransactionManager)
                 .reader(new HttpPageItemReader(1, fetchMovieUseCase))
                 .writer(chunk -> {

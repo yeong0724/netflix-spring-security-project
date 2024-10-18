@@ -1,7 +1,6 @@
 package com.jinyeong.netflix.batch;
 
 import com.jinyeong.netflix.movie.FetchMovieUseCase;
-import com.jinyeong.netflix.movie.NetflixMovie;
 import com.jinyeong.netflix.movie.response.MovieResponse;
 import com.jinyeong.netflix.movie.response.PageableMoviesResponse;
 import org.springframework.batch.item.support.AbstractItemCountingItemStreamItemReader;
