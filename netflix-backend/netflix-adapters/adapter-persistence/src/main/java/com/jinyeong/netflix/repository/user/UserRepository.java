@@ -19,6 +19,19 @@ public class UserRepository implements FetchUserPort, InsertUserPort {
     private final SocialUserJpaRepository socialUserJpaRepository;
 
     @Override
+    public Optional<UserPortResponse> findByUserId(String userId) {
+        Optional<UserEntity> userByUserId = userJpaRepository.findByUserId(userId);
+
+        return userByUserId.map(userEntity -> UserPortResponse.builder()
+                .userId(userEntity.getUserId())
+                .password(userEntity.getPassword())
+                .username(userEntity.getUsername())
+                .email(userEntity.getEmail())
+                .phone(userEntity.getPhone())
+                .build());
+    }
+
+    @Override
     public Optional<UserPortResponse> findByEmail(String email) {
         Optional<UserEntity> userByEmail = userJpaRepository.findByEmail(email);
         return userByEmail.map(userEntity -> UserPortResponse.builder()

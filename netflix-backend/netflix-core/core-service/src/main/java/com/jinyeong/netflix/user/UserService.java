@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
@@ -17,14 +18,22 @@ public class UserService implements FetchUserUseCase, RegisterUserUseCase {
     private final KakaoUserPort kakaoUserPort;
 
     @Override
+    public UserResponse findUserByUserId(String userId) {
+        return findUserBy(userId, fetchUserPort::findByUserId);
+    }
+
+    @Override
     public UserResponse findUserByEmail(String email) {
-        Optional<UserPortResponse> userByEmail = fetchUserPort.findByEmail(email);
-        if (userByEmail.isEmpty()) {
-            throw new UserException.UserDoesNotExistException();
-        }
+        return findUserBy(email, fetchUserPort::findByEmail);
+    }
 
-        UserPortResponse userPortResponse = userByEmail.get();
+    private UserResponse findUserBy(String searchParam, Function<String, Optional<UserPortResponse>> searchFunction) {
+        return searchFunction.apply(searchParam)
+                .map(this::mapToUserResponse)
+                .orElseThrow(UserException.UserDoesNotExistException::new);
+    }
 
+    private UserResponse mapToUserResponse(UserPortResponse userPortResponse) {
         return UserResponse.builder()
                 .userId(userPortResponse.getUserId())
                 .email(userPortResponse.getEmail())

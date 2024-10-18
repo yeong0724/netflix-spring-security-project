@@ -25,6 +25,8 @@ public class NetflixUserDetailsService implements UserDetailsService {
         // TODO: 회원이 존재하지 않을 경우에 대한 예외처리 작업 필요
         UserResponse userResponse = fetchUserUseCase.findUserByEmail(email);
 
+
+
         return new NetflixAuthUser(
                 userResponse.getUserId(),
                 userResponse.getUsername(),

@@ -67,7 +67,9 @@ public class UserController {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(token);
         NetflixAuthUser netflixAuthUser = (NetflixAuthUser) authentication.getPrincipal();
 
-        return NetflixApiResponse.ok("access-token");
+        String accessToken = updateTokenUseCase.updateInsertToken(netflixAuthUser.getUserId());
+
+        return NetflixApiResponse.ok(accessToken);
     }
 
     @PostMapping("/user/callback")

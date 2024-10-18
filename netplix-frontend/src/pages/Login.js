@@ -22,7 +22,7 @@ function Login({ setIsLoggedIn }) {
       );
 
       if (!response.data.success) {
-        alert("로그인 실패. " + response.data.code);
+        alert(`${response.data.message}\n(Error Code : ${response.data.code})`);
       } else {
         // 응답이 성공하면 로그인 처리 (토큰 저장 등)
         // 예: localStorage에 토큰 저장

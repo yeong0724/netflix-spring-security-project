@@ -74,7 +74,13 @@ public class TokenService implements FetchTokenUseCase, UpdateTokenUseCase, Crea
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
         }
 
-        return fetchUserUseCase.findByProviderId(userId.toString());
+        UserResponse userByProviderId = fetchUserUseCase.findByProviderId(userId.toString());
+
+        if (userByProviderId != null) {
+            return userByProviderId;
+        }
+
+        return fetchUserUseCase.findUserByUserId(userId.toString());
     }
 
     @Override
