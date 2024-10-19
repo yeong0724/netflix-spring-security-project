@@ -9,7 +9,6 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -61,11 +60,11 @@ public class TokenEntity extends MutableBaseEntity {
     }
 
     private static LocalDateTime getAccessTokenExpiredAt(LocalDateTime now) {
-        return now.plusHours(3);
+        return now.plusMinutes(15);
     }
 
     private static LocalDateTime getRefreshTokenExpiredAt(LocalDateTime now) {
-        return now.plusHours(24);
+        return now.plusMinutes(60);
     }
 
     public NetflixToken toDomain() {
