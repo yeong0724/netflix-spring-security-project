@@ -1,6 +1,7 @@
 package com.jinyeong.netflix.user;
 
 import com.jinyeong.netflix.exception.UserException;
+import com.jinyeong.netflix.user.command.UserHistoryCommand;
 import com.jinyeong.netflix.user.command.UserRegistrationCommand;
 import com.jinyeong.netflix.user.command.UserResponse;
 import com.jinyeong.netflix.user.response.UserRegistrationResponse;
@@ -12,10 +13,11 @@ import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements FetchUserUseCase, RegisterUserUseCase {
+public class UserService implements FetchUserUseCase, RegisterUserUseCase, UserHistoryUseCase {
     private final FetchUserPort fetchUserPort;
     private final InsertUserPort insertUserPort;
     private final KakaoUserPort kakaoUserPort;
+    private final UserHistoryPort userHistoryPort;
 
     @Override
     public UserResponse findUserByUserId(String userId) {
@@ -106,5 +108,18 @@ public class UserService implements FetchUserUseCase, RegisterUserUseCase {
                 .provider(userPortResponse.getProvider())
                 .providerId(userPortResponse.getProviderId())
                 .build();
+    }
+
+    @Override
+    public void createHistory(UserHistoryCommand userHistoryCommand) {
+        userHistoryPort.createHistory(
+                userHistoryCommand.getUserId(),
+                userHistoryCommand.getUserRole(),
+                userHistoryCommand.getClientIp(),
+                userHistoryCommand.getReqMethod(),
+                userHistoryCommand.getReqUrl(),
+                userHistoryCommand.getReqHeader(),
+                userHistoryCommand.getReqPayload()
+        );
     }
 }

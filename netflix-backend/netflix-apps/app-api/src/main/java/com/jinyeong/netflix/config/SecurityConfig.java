@@ -1,6 +1,7 @@
 package com.jinyeong.netflix.config;
 
 import com.jinyeong.netflix.filter.JwtAuthenticationFilter;
+import com.jinyeong.netflix.filter.UserHistoryLoggingFilter;
 import com.jinyeong.netflix.security.NetflixUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +26,7 @@ import java.util.Collections;
 public class SecurityConfig {
     private final NetflixUserDetailsService netflixUserDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
+    private final UserHistoryLoggingFilter userHistoryLoggingFilter;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -38,7 +39,8 @@ public class SecurityConfig {
                         auth.requestMatchers("/", "/register", "/api/v1/user/**", "/api/v1/auth/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2.failureUrl("/login?error=true"))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(userHistoryLoggingFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

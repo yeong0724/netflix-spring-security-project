@@ -2,14 +2,13 @@ package com.jinyeong.netflix.repository.user;
 
 import com.jinyeong.netflix.entity.user.SocialUserEntity;
 import com.jinyeong.netflix.entity.user.UserEntity;
+import com.jinyeong.netflix.entity.user.UserHistoryEntity;
 import com.jinyeong.netflix.repository.subscription.UserSubscriptionRepository;
 
 import com.jinyeong.netflix.subscription.UserSubscription;
-import com.jinyeong.netflix.user.CreateUser;
-import com.jinyeong.netflix.user.FetchUserPort;
-import com.jinyeong.netflix.user.InsertUserPort;
-import com.jinyeong.netflix.user.UserPortResponse;
+import com.jinyeong.netflix.user.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,10 +18,12 @@ import static com.jinyeong.netflix.subscription.SubscriptionType.*;
 
 @Repository
 @RequiredArgsConstructor
-public class UserRepository implements FetchUserPort, InsertUserPort {
+@Slf4j
+public class UserRepository implements FetchUserPort, InsertUserPort, UserHistoryPort {
     private final UserJpaRepository userJpaRepository;
     private final SocialUserJpaRepository socialUserJpaRepository;
     private final UserSubscriptionRepository userSubscriptionRepository;
+    private final UserHistoryJpaRepository userHistoryJpaRepository;
 
     @Override
     public Optional<UserPortResponse> findByUserId(String userId) {
@@ -113,5 +114,23 @@ public class UserRepository implements FetchUserPort, InsertUserPort {
                 .provider(socialUserEntity.getProvider())
                 .providerId(socialUserEntity.getProviderId())
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public void createHistory(
+            String userId,
+            String userRole,
+            String clientIp,
+            String reqMethod,
+            String reqUrl,
+            String reqHeader,
+            String reqPayload
+    ) {
+        UserHistoryEntity userHistoryEntity = new UserHistoryEntity(
+                userId, userRole, clientIp, reqMethod, reqUrl, reqHeader, reqPayload
+        );
+
+        userHistoryJpaRepository.save(userHistoryEntity);
     }
 }
