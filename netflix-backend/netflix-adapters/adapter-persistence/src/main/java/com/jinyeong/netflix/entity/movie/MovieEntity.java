@@ -58,6 +58,7 @@ public class MovieEntity extends MutableBaseEntity {
 
     public NetflixMovie toDomain() {
         return NetflixMovie.builder()
+                .movieId(this.movieId)
                 .movieName(this.movieName)
                 .isAdult(this.isAdult)
                 .genre(this.genre)

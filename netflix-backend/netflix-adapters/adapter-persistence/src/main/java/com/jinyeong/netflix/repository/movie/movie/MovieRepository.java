@@ -28,8 +28,15 @@ public class MovieRepository implements PersistenceMoviePort {
     }
 
     @Override
-    public NetflixMovie findById(String movieName) {
+    public NetflixMovie findByMovieName(String movieName) {
         return movieJpaRepository.findByMovieName(movieName)
+                .map(MovieEntity::toDomain)
+                .orElse(null);
+    }
+
+    @Override
+    public NetflixMovie findByMovieId(String movieId) {
+        return movieJpaRepository.findByMovieId(movieId)
                 .map(MovieEntity::toDomain)
                 .orElse(null);
     }

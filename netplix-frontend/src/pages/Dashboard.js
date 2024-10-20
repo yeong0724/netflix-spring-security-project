@@ -29,10 +29,10 @@ function Dashboard() {
     setPage(e.target.value);
   };
 
-  const like = (movieName) => {
+  const like = (movieId) => {
     const response = axios
       .post(
-        `http://localhost:8080/api/v1/movie/${movieName}/like`,
+        `http://localhost:8080/api/v1/movie/${movieId}/like`,
         {},
         {
           headers: {
@@ -48,10 +48,10 @@ function Dashboard() {
       });
   };
 
-  const unlike = (movieName) => {
+  const unlike = (movieId) => {
     const response = axios
       .post(
-        `http://localhost:8080/api/v1/movie/${movieName}/unlike`,
+        `http://localhost:8080/api/v1/movie/${movieId}/unlike`,
         {},
         {
           headers: {
@@ -67,10 +67,10 @@ function Dashboard() {
       });
   };
 
-  const download = (movieName) => {
+  const download = (movieId) => {
     axios
       .post(
-        `http://localhost:8080/api/v1/movie/${movieName}/download`,
+        `http://localhost:8080/api/v1/movie/${movieId}/download`,
         {},
         {
           headers: {
@@ -112,13 +112,13 @@ function Dashboard() {
                 <td>{item.genre.join(", ")}</td>
                 <td>{item.overview}</td>
                 <td>
-                  <button onClick={() => like(item.movieName)}>좋아요</button>
+                  <button onClick={() => like(item.movieId)}>좋아요</button>
                 </td>
                 <td>
-                  <button onClick={() => unlike(item.movieName)}>싫어요</button>
+                  <button onClick={() => unlike(item.movieId)}>싫어요</button>
                 </td>
                 <td>
-                  <button onClick={() => download(item.movieName)}>
+                  <button onClick={() => download(item.movieId)}>
                     download
                   </button>
                 </td>

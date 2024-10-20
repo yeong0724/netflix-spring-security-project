@@ -1,15 +1,15 @@
 package com.jinyeong.netflix.batch;
 
 import com.jinyeong.netflix.movie.FetchMovieUseCase;
-import com.jinyeong.netflix.movie.response.MovieResponse;
-import com.jinyeong.netflix.movie.response.PageableMoviesResponse;
+import com.jinyeong.netflix.movie.response.MovieBatchResponse;
+import com.jinyeong.netflix.movie.response.PageableMoviesBatchResponse;
 import org.springframework.batch.item.support.AbstractItemCountingItemStreamItemReader;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class HttpPageItemReader extends AbstractItemCountingItemStreamItemReader<MovieResponse> {
-    private final List<MovieResponse> contents = new LinkedList<>();
+public class HttpPageItemReader extends AbstractItemCountingItemStreamItemReader<MovieBatchResponse> {
+    private final List<MovieBatchResponse> contents = new LinkedList<>();
 
     private int page;
 
@@ -21,10 +21,10 @@ public class HttpPageItemReader extends AbstractItemCountingItemStreamItemReader
     }
 
     @Override
-    protected MovieResponse doRead() throws Exception {
+    protected MovieBatchResponse doRead() throws Exception {
         if (this.contents.isEmpty()) {
-            PageableMoviesResponse moviePageableResponse = fetchMovieUseCase.fetchFromClient(page);
-            contents.addAll(moviePageableResponse.getMovieResponses());
+            PageableMoviesBatchResponse pageableMoviesBatchResponse = fetchMovieUseCase.fetchFromClient(page);
+            contents.addAll(pageableMoviesBatchResponse.getMovieBatchResponses());
             page++;
         }
 

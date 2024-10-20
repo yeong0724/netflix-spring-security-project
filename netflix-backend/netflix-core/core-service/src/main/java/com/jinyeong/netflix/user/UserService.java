@@ -88,6 +88,7 @@ public class UserService implements FetchUserUseCase, RegisterUserUseCase {
 
         return fetchUserPort.findByProviderId(providerId)
                 .map(userByProviderId -> UserResponse.builder()
+                        .userId(userByProviderId.getUserId())
                         .providerId(userByProviderId.getProviderId())
                         .provider(userByProviderId.getProvider())
                         .username(userByProviderId.getUsername())

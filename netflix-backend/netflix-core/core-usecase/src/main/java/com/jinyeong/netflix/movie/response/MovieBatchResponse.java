@@ -5,23 +5,14 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class MovieResponse {
-    private final String movieId;
+public class MovieBatchResponse {
     private final String movieName;
     private final boolean isAdult;
     private final List<String> genre;
     private final String overview;
     private final String releaseAt;
 
-    public MovieResponse(
-            String movieId,
-            String movieName,
-            boolean isAdult,
-            List<String> genre,
-            String overview,
-            String releaseAt
-    ) {
-        this.movieId = movieId;
+    public MovieBatchResponse(String movieName, boolean isAdult, List<String> genre, String overview, String releaseAt) {
         this.movieName = movieName;
         this.isAdult = isAdult;
         this.genre = genre;
