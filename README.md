@@ -52,4 +52,10 @@ root
 |-- netplix-frontend/ # react.js 기반 프론트엔드 모듈
 ```
 
+## 3. 테이블 구조
+
 ![netflix_membership_erd.png](./netflix_membership_erd.png)
+
+## 4. 영화 데이터 (TMDB - The Movie Database)
+
+- 영화 데이터를 가져오기 위해 TMDB 라는 곳을 활용
